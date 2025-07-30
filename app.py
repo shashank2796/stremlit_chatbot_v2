@@ -7,10 +7,19 @@ import os
 float_init()
 
 # --- SESSION STATE ---
-if "messages" not in st.session_state:
-    st.session_state.messages = [{"role": "assistant", "content": "Hi! How may I assist you today?"}]
+# if "messages" not in st.session_state:
+#     st.session_state.messages = [{"role": "assistant", "content": "Hi! How may I assist you today?"}]
 
-st.title("🎙️ Audio-to-Audio Chatbot (Gemini)")
+# st.title("🎙️ Audio-to-Audio Chatbot (Gemini)")
+
+# --- SESSION STATE ---
+if "messages" not in st.session_state:
+    st.session_state.messages = []
+
+# --- PLAY WELCOME AUDIO ON FIRST LOAD ---
+if "welcome_played" not in st.session_state:
+    play_welcome_audio()
+    st.session_state.welcome_played = True
 
 # --- FOOTER MICROPHONE ---
 footer_container = st.container()
