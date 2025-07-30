@@ -17,7 +17,7 @@ from streamlit_float import float_init
 import os
 
 float_init()
-st.title("🎙️ Audio-to-Audio Chatbot (Gemini)")
+st.title("🎙️ KION India Chatbot")
 # ---------- SESSION STATE ----------
 if "messages" not in st.session_state:
     st.session_state.messages = []
@@ -25,9 +25,9 @@ if "messages" not in st.session_state:
 # welcome audio only once
 if "welcome_played" not in st.session_state:
     st.session_state.welcome_played = False
-    play_welcome_audio()
+    # play_welcome_audio()
 if "stage" not in st.session_state:          # 🔑 add this line
-    st.session_state.stage = 1         # 1 = Q1, 2 = Q2, 3 = free chat
+    st.session_state.stage = 0         # 1 = Q1, 2 = Q2, 3 = free chat
 
 # ---------- QUESTION BANK ----------
 QUESTIONS = {
@@ -47,17 +47,27 @@ QUESTIONS = {
     },
 }
 
-# ---------- HELPER ----------
-def ask_question(stage: int):
-    q = QUESTIONS[stage]
-    st.session_state.messages.append({"role": "assistant", "content": q["text"]})
-    audio_file = text_to_speech(q["text"])
+# ---------- UTILITY ----------
+def speak(text: str, delay: float = 2.0):
+    """Play audio and block until it (likely) finishes."""
+    audio_file = text_to_speech(text)
     autoplay_audio(audio_file)
+    time.sleep(delay)          # adjust if your audio is longer/shorter
     os.remove(audio_file)
 
-# ---------- AUTO-ASK FIRST QUESTION ----------
+# ---------- SEQUENCE ON FIRST LOAD ----------
+if st.session_state.stage == 0 and not st.session_state.welcome_played:
+    speak("Hi welcome to India, hope you had a nice flight. Let's speed you up!! Welcome onboard.", 4)
+    st.session_state.welcome_played = True
+    st.session_state.stage = 1
+
 if st.session_state.stage == 1 and len(st.session_state.messages) == 0:
-    ask_question(1)
+    speak(QUESTIONS[1]["text"], 2)
+    st.session_state.messages.append({"role": "assistant", "content": QUESTIONS[1]["text"]})
+
+if st.session_state.stage == 2 and len(st.session_state.messages) == 2:
+    speak(QUESTIONS[2]["text"], 2)
+    st.session_state.messages.append({"role": "assistant", "content": QUESTIONS[2]["text"]})
 
 # ---------- FOOTER MIC ----------
 footer_container = st.container()
@@ -82,45 +92,37 @@ if audio_bytes:
                 st.write(transcript)
             os.remove(tmp_audio)
 
-            # ---------- STAGE LOGIC ----------
+            # ---------- BRANCHING LOGIC ----------
             stage = st.session_state.stage
             if stage in (1, 2):
                 q = QUESTIONS[stage]
                 answer = transcript.lower()
-                if any(p in answer for p in q["positive"]):
-                    reply = q["reply_pos"]
-                elif any(n in answer for n in q["negative"]):
-                    reply = q["reply_neg"]
-                else:
-                    reply = "Thanks for sharing!"
-
+                reply = (
+                    q["reply_pos"]
+                    if any(p in answer for p in q["positive"])
+                    else q["reply_neg"]
+                )
+                speak(reply, 2.5)
                 st.session_state.messages.append({"role": "assistant", "content": reply})
-                audio_file = text_to_speech(reply)
-                autoplay_audio(audio_file)
-                os.remove(audio_file)
-
-                # move to next stage
                 st.session_state.stage += 1
-                if st.session_state.stage == 3:
-                    # free chat starts – no more scripted questions
-                    pass
-                else:
-                    # ask next scripted question
-                    ask_question(st.session_state.stage)
 
-            else:
-                # free chat with Gemini
+                # queue next question or switch to open chat
+                if st.session_state.stage == 2:
+                    time.sleep(0.5)
+                    speak(QUESTIONS[2]["text"], 2)
+                    st.session_state.messages.append({"role": "assistant", "content": QUESTIONS[2]["text"]})
+                elif st.session_state.stage == 3:
+                    pass  # free chat starts after next user utterance
+
+            elif stage == 3:  # free chat
                 with st.chat_message("assistant"):
                     with st.spinner("Thinking🤔..."):
                         response = get_answer(st.session_state.messages)
-                    audio_file = text_to_speech(response)
-                    autoplay_audio(audio_file)
+                    speak(response, 3)
                     st.write(response)
                     st.session_state.messages.append({"role": "assistant", "content": response})
-                    os.remove(audio_file)
 
 footer_container.float("bottom: 0rem;")
-
 
 
 
