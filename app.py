@@ -10,7 +10,6 @@ from utils import (
     text_to_speech,
     autoplay_audio,
     speech_to_text,
-    play_welcome_audio,
 )
 from audio_recorder_streamlit import audio_recorder
 from streamlit_float import float_init
