@@ -9,18 +9,7 @@ import tempfile
 genai.configure(api_key=st.secrets["GEMINI_API_KEY"])
 model = genai.GenerativeModel("gemini-2.0-flash-exp")
 
-SYSTEM = "You are a helpful AI chatbot that answers questions asked by the User."
-
-# ---------- WELCOME AUDIO ----------
-WELCOME_TEXT = (
-    "Hi CP, Nino welcome to India, hope you had a great flight. "
-    "Let's speed you up!! Welcome onboard."
-)
-
-def play_welcome_audio():
-    audio_path = text_to_speech(WELCOME_TEXT)
-    autoplay_audio(audio_path)
-    os.remove(audio_path)
+# SYSTEM = "You are a helpful AI chatbot that answers questions asked by the User."
 
 
 # ---------------- CHAT ----------------
