@@ -1,0 +1,6 @@
+streamlit
+google-generativeai
+gTTS
+audio_recorder_streamlit
+streamlit-float
+python-dotenv
