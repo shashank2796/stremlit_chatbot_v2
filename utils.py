@@ -11,6 +11,18 @@ model = genai.GenerativeModel("gemini-2.0-flash-exp")
 
 SYSTEM = "You are a helpful AI chatbot that answers questions asked by the User."
 
+# ---------- WELCOME AUDIO ----------
+WELCOME_TEXT = (
+    "Hi CP, Nino welcome to India, hope you had a great flight. "
+    "Let's speed you up!! Welcome onboard."
+)
+
+def play_welcome_audio():
+    audio_path = text_to_speech(WELCOME_TEXT)
+    autoplay_audio(audio_path)
+    os.remove(audio_path)
+
+
 # ---------------- CHAT ----------------
 def get_answer(messages):
     prompt = SYSTEM + "\n" + "\n".join([f"{m['role']}: {m['content']}" for m in messages])
