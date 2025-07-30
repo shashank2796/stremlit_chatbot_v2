@@ -24,9 +24,10 @@ if "messages" not in st.session_state:
 
 # welcome audio only once
 if "welcome_played" not in st.session_state:
+    st.session_state.welcome_played = False
     play_welcome_audio()
-    st.session_state.welcome_played = True
-    st.session_state.stage = 1          # 1 = Q1, 2 = Q2, 3 = free chat
+if "stage" not in st.session_state:          # 🔑 add this line
+    st.session_state.stage = 1         # 1 = Q1, 2 = Q2, 3 = free chat
 
 # ---------- QUESTION BANK ----------
 QUESTIONS = {
