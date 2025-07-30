@@ -16,6 +16,8 @@ float_init()
 if "messages" not in st.session_state:
     st.session_state.messages = []
 
+st.title("🎙️ KION India Chatbot")
+
 # --- PLAY WELCOME AUDIO ON FIRST LOAD ---
 if "welcome_played" not in st.session_state:
     play_welcome_audio()
