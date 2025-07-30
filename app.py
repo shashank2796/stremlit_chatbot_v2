@@ -4,6 +4,7 @@ from audio_recorder_streamlit import audio_recorder
 from streamlit_float import float_init
 import os
 import time
+import tempfile
 import streamlit as st
 from utils import (
     get_answer,
@@ -47,26 +48,23 @@ QUESTIONS = {
 }
 
 # ---------- UTILITY ----------
-def speak(text: str, delay: float = 2.0):
-    """Play audio and block until it (likely) finishes."""
-    audio_file = text_to_speech(text)
-    autoplay_audio(audio_file)
-    time.sleep(delay)          # adjust if your audio is longer/shorter
-    os.remove(audio_file)
+def speak(text: str, delay: float):
+    """Return path to audio file AND block."""
+    tts = gTTS(text=text, lang="en")
+    tmp = tempfile.NamedTemporaryFile(delete=False, suffix=".mp3")
+    tts.save(tmp.name)
+    autoplay_audio(tmp.name)
+    time.sleep(delay)
+    return tmp.name
 
 # ---------- SEQUENCE ON FIRST LOAD ----------
 if st.session_state.stage == 0 and not st.session_state.welcome_played:
-    speak("Hi welcome to India, hope you had a nice flight. Let's speed you up!! Welcome onboard.", 4)
-    st.session_state.welcome_played = True
+    f1 = speak("Hi welcome to India, hope you had a nice flight. Let's speed you up!! Welcome onboard.", 5)
     st.session_state.stage = 1
-
-if st.session_state.stage == 1 and len(st.session_state.messages) == 0:
-    speak(QUESTIONS[1]["text"], 2)
+    time.sleep(0.5)                       # small gap
+    f2 = speak(QUESTIONS[1]["text"], 2.5)
     st.session_state.messages.append({"role": "assistant", "content": QUESTIONS[1]["text"]})
-
-if st.session_state.stage == 2 and len(st.session_state.messages) == 2:
-    speak(QUESTIONS[2]["text"], 2)
-    st.session_state.messages.append({"role": "assistant", "content": QUESTIONS[2]["text"]})
+    os.remove(f1); os.remove(f2) 
 
 # ---------- FOOTER MIC ----------
 footer_container = st.container()
