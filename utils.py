@@ -9,7 +9,7 @@ import tempfile
 genai.configure(api_key=st.secrets["GEMINI_API_KEY"])
 model = genai.GenerativeModel("gemini-2.0-flash-exp")
 
-# SYSTEM = "You are a helpful AI chatbot that answers questions asked by the User."
+SYSTEM = "You are a helpful AI chatbot that answers questions asked by the User."
 
 
 # ---------------- CHAT ----------------
