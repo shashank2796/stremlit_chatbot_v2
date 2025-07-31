@@ -48,7 +48,7 @@ QUESTIONS = {
 }
 
 # ---------- UTILITY ----------
-def speak(text: str, delay: float = 2.0):
+def speak(text: str, delay: float = 5.0):
     """Play audio and block until it (likely) finishes."""
     audio_file = text_to_speech(text)
     autoplay_audio(audio_file)
@@ -57,16 +57,16 @@ def speak(text: str, delay: float = 2.0):
 
 # ---------- SEQUENCE ON FIRST LOAD ----------
 if st.session_state.stage == 0 and not st.session_state.welcome_played:
-    speak("Hi welcome to India, hope you had a nice flight. Let's speed you up!! Welcome onboard.", 4)
+    speak("Hi welcome to India, hope you had a nice flight. Let's speed you up!! Welcome onboard.", 5)
     st.session_state.welcome_played = True
     st.session_state.stage = 1
 
 if st.session_state.stage == 1 and len(st.session_state.messages) == 0:
-    speak(QUESTIONS[1]["text"], 2)
+    speak(QUESTIONS[1]["text"], 5)
     st.session_state.messages.append({"role": "assistant", "content": QUESTIONS[1]["text"]})
 
 if st.session_state.stage == 2 and len(st.session_state.messages) == 2:
-    speak(QUESTIONS[2]["text"], 2)
+    speak(QUESTIONS[2]["text"], 5)
     st.session_state.messages.append({"role": "assistant", "content": QUESTIONS[2]["text"]})
 
 # ---------- FOOTER MIC ----------
@@ -102,14 +102,14 @@ if audio_bytes:
                     if any(p in answer for p in q["positive"])
                     else q["reply_neg"]
                 )
-                speak(reply, 2.5)
+                speak(reply, 5)
                 st.session_state.messages.append({"role": "assistant", "content": reply})
                 st.session_state.stage += 1
 
                 # queue next question or switch to open chat
                 if st.session_state.stage == 2:
                     time.sleep(0.5)
-                    speak(QUESTIONS[2]["text"], 2)
+                    speak(QUESTIONS[2]["text"], 5)
                     st.session_state.messages.append({"role": "assistant", "content": QUESTIONS[2]["text"]})
                 elif st.session_state.stage == 3:
                     pass  # free chat starts after next user utterance
@@ -118,7 +118,7 @@ if audio_bytes:
                 with st.chat_message("assistant"):
                     with st.spinner("Thinking🤔..."):
                         response = get_answer(st.session_state.messages)
-                    speak(response, 3)
+                    speak(response, 5)
                     st.write(response)
                     st.session_state.messages.append({"role": "assistant", "content": response})
 
