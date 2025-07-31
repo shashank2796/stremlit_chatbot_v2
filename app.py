@@ -57,7 +57,7 @@ def speak(text: str, delay: float = 5.0):
 
 # ---------- SEQUENCE ON FIRST LOAD ----------
 if st.session_state.stage == 0 and not st.session_state.welcome_played:
-    speak("Hi welcome to India, hope you had a nice flight. Let's speed you up!! Welcome onboard.", 5)
+    speak("Hi CP and Nino!! welcome to India. Let's speed you up!! Welcome onboard.", 10)
     st.session_state.welcome_played = True
     st.session_state.stage = 1
 
