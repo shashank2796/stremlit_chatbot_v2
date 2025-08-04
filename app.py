@@ -126,13 +126,23 @@ if audio_bytes:
                 st.session_state.messages.append({"role": "assistant", "content": reply})
                 st.session_state.stage = 2  # trigger second welcome next rerun
 
-            elif stage == 3:  # free chat
-                with st.chat_message("assistant"):
-                    with st.spinner("Thinking🤔..."):
-                        response = get_answer(st.session_state.messages)
-                    speak(response, 5)
-                    st.write(response)
-                    st.session_state.messages.append({"role": "assistant", "content": response})
+                # 2) IMMEDIATELY play the second welcome
+                second_welcome = (
+                    "Now… let’s get started. Meeeee – that’s me – KTCI. "
+                    "Currently interfacing with you from the Special Economic Zone in Pune, buzzing with innovation, automation, and a touch of Indian precision. "
+                    "I may be one digital face on this screen but behind me are seven powerful departments, connected, synchronized, and operating as one unified system: "
+                    "Product Strategy, Cost Engineering, Simulation & Testing, Complexity Management, Product Sustainability, Electronic Systems, Robotics Systems and AI."
+                )
+                speak(second_welcome, 45)
+                st.session_state.messages.append({"role": "assistant", "content": second_welcome})
+
+            # elif stage == 3:  # free chat
+            #     with st.chat_message("assistant"):
+            #         with st.spinner("Thinking🤔..."):
+            #             response = get_answer(st.session_state.messages)
+            #         speak(response, 5)
+            #         st.write(response)
+            #         st.session_state.messages.append({"role": "assistant", "content": response})
 
 
             
@@ -227,6 +237,7 @@ footer_container.float("bottom: 0rem;")
 #         os.remove(audio_file)
 
 # footer_container.float("bottom: 0rem;")
+
 
 
 
