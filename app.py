@@ -96,8 +96,10 @@ if audio_bytes:
                     "Currently interfacing with you from the Special Economic Zone in Pune, buzzing with innovation, automation, and a touch of Indian precision. "
                     "I may be one digital face on this screen but behind me are seven powerful departments, connected, synchronized, and operating as one unified system: "
                     "Product Strategy, Cost Engineering, Simulation & Testing, Complexity Management, Product Sustainability, Electronic Systems, Robotics Systems and AI."
+                    "You’ll get to know each of them as your journey with us unfolds today. Think of me as your interface, your assistant, and your guide. Let the KTCI experience begin."
+                    "And remember – I’m always connected, always learning."
                 )
-                speak(second_welcome, 45)
+                speak(second_welcome, 50)
                 st.session_state.messages.append({"role": "assistant", "content": second_welcome})
 
                 # jump to free chat
@@ -318,3 +320,4 @@ footer_container.float("bottom: 0rem;")
 #             #         st.session_state.messages.append({"role": "assistant", "content": response})
 
 # footer_container.float("bottom: 0rem;")
+
