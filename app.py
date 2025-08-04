@@ -71,8 +71,8 @@ if st.session_state.stage == 0 and not st.session_state.welcome1_done:
 
 # 2) Stage 1 – ask Question 1
 if st.session_state.stage == 1 and len(st.session_state.messages) == 0:
-    speak(QUESTION_1[1]["text"], 5)
-    st.session_state.messages.append({"role": "assistant", "content": QUESTION_1[1]["text"]})
+    speak(QUESTION_1["text"], 5)
+    st.session_state.messages.append({"role": "assistant", "content": QUESTION_1["text"]})
 
 # 3) Stage 2 – second welcome (after user answers Q1)
 if st.session_state.stage == 2 and not st.session_state.welcome2_done:
@@ -227,6 +227,7 @@ footer_container.float("bottom: 0rem;")
 #         os.remove(audio_file)
 
 # footer_container.float("bottom: 0rem;")
+
 
 
 
