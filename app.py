@@ -136,34 +136,34 @@ if audio_bytes:
 
 
             
-            stage = st.session_state.stage
-            if stage in (1, 2):
-                q = QUESTIONS[stage]
-                answer = transcript.lower()
-                reply = (
-                    q["reply_pos"]
-                    if any(p in answer for p in q["positive"])
-                    else q["reply_neg"]
-                )
-                speak(reply, 5)
-                st.session_state.messages.append({"role": "assistant", "content": reply})
-                st.session_state.stage += 1
+            # stage = st.session_state.stage
+            # if stage in (1, 2):
+            #     q = QUESTIONS[stage]
+            #     answer = transcript.lower()
+            #     reply = (
+            #         q["reply_pos"]
+            #         if any(p in answer for p in q["positive"])
+            #         else q["reply_neg"]
+            #     )
+            #     speak(reply, 5)
+            #     st.session_state.messages.append({"role": "assistant", "content": reply})
+            #     st.session_state.stage += 1
 
-                # queue next question or switch to open chat
-                if st.session_state.stage == 2:
-                    time.sleep(0.5)
-                    speak(QUESTIONS[2]["text"], 5)
-                    st.session_state.messages.append({"role": "assistant", "content": QUESTIONS[2]["text"]})
-                elif st.session_state.stage == 3:
-                    pass  # free chat starts after next user utterance
+            #     # queue next question or switch to open chat
+            #     if st.session_state.stage == 2:
+            #         time.sleep(0.5)
+            #         speak(QUESTIONS[2]["text"], 5)
+            #         st.session_state.messages.append({"role": "assistant", "content": QUESTIONS[2]["text"]})
+            #     elif st.session_state.stage == 3:
+            #         pass  # free chat starts after next user utterance
 
-            elif stage == 3:  # free chat
-                with st.chat_message("assistant"):
-                    with st.spinner("Thinking🤔..."):
-                        response = get_answer(st.session_state.messages)
-                    speak(response, 5)
-                    st.write(response)
-                    st.session_state.messages.append({"role": "assistant", "content": response})
+            # elif stage == 3:  # free chat
+            #     with st.chat_message("assistant"):
+            #         with st.spinner("Thinking🤔..."):
+            #             response = get_answer(st.session_state.messages)
+            #         speak(response, 5)
+            #         st.write(response)
+            #         st.session_state.messages.append({"role": "assistant", "content": response})
 
 footer_container.float("bottom: 0rem;")
 
@@ -227,6 +227,7 @@ footer_container.float("bottom: 0rem;")
 #         os.remove(audio_file)
 
 # footer_container.float("bottom: 0rem;")
+
 
 
 
