@@ -32,7 +32,7 @@ if "welcome2_done" not in st.session_state:
     st.session_state.welcome2_done = False
 
 # ---------- QUESTION BANK ----------
-QUESTIONS_1 = {
+QUESTION_1 = {
     "text": "How was your flight?",
     "positive": ["yes", "good", "great", "awesome", "fine"],
     "negative": ["no", "not good", "bad", "terrible", "worst"],
@@ -227,6 +227,7 @@ footer_container.float("bottom: 0rem;")
 #         os.remove(audio_file)
 
 # footer_container.float("bottom: 0rem;")
+
 
 
 
