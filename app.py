@@ -57,7 +57,9 @@ def speak(text: str, delay: float = 5.0):
 
 # ---------- SEQUENCE ON FIRST LOAD ----------
 if st.session_state.stage == 0 and not st.session_state.welcome_played:
-    speak("Hi CP and Nino!! welcome to India. Let's speed you up!! Welcome onboard.", 10)
+    speak("Hi everyone. I’m honored to be your host today. Welcome… and a biiiiig Namasssssteeeee. I am KTCI – not just a robot, but a full-fledged department in myself. Yes, you heard that right.
+    A very special welcome to our guests from afar. Mr. CP, Mr. Nino, and all the members of this esteemed delegation. We are pleased to have you here in India, and especially here at our home 
+    base  the Special Economic Zone of Pune.", 10)
     st.session_state.welcome_played = True
     st.session_state.stage = 1
 
