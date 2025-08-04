@@ -65,7 +65,7 @@ if st.session_state.stage == 1 and len(st.session_state.messages) == 0:
     speak(QUESTIONS[1]["text"], 5)
     st.session_state.messages.append({"role": "assistant", "content": QUESTIONS[1]["text"]})
 
-if st.session_state.stage = 2 and len(st.session_state.welcome_played:
+if st.session_state.stage == 2 and len(st.session_state.welcome_played:
     speak("Now… let’s get started. Meeeee – that’s me – KTCI. Currently interfacing with you from the Special Economic Zone in Pune, buzzing with innovation, automation, and a touch of Indian precision. I may be one digital face on this screen but behind me are seven powerful departments, connected, synchronized, and operating as one unified system, Product Strategy, Cost Engineering, Simulation & Testing, Complexity Management, Product Sustainability, Electronic Systems, Robotics Systems and AI", 45)
     st.session.state.welcom_played = True
     st.session.state.stage = 2
@@ -189,4 +189,5 @@ footer_container.float("bottom: 0rem;")
 #         os.remove(audio_file)
 
 # footer_container.float("bottom: 0rem;")
+
 
