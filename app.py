@@ -6,7 +6,7 @@ import os
 import time
 
 float_init()
-st.title("🎙️ KION India Chatbot")
+st.title("🎙️ KTCI Chatbot")
 
 # ---------- SESSION STATE ----------
 if "messages" not in st.session_state:
@@ -38,7 +38,7 @@ def speak(text: str, delay: float = 5.0):
 # 1) Stage 0 – first welcome
 if st.session_state.stage == 0 and not st.session_state.welcome1_done:
     speak(
-        "Hi everyone. I’m honored to be your host today. Welcome… and a biiiiig Namasssssteeeee. "
+        "  Hi everyone. I’m honored to be your host today. Welcome… and a biiiiig Namasssssteeeee. "
         "I am KTCI – not just a robot, but a full-fledged department in myself. "
         "Yes, you heard that right. A very special welcome to our guests from afar. "
         "Mr. CP, Mr. Nino, and all the members of this esteemed delegation. "
@@ -92,7 +92,7 @@ if audio_bytes:
 
                 # second welcome (played automatically)
                 second_welcome = (
-                    "Now… let’s get started. Meeeee – that’s me – KTCI. "
+                    "  Now… let’s get started. Meeeee – that’s me – KTCI. "
                     "Currently interfacing with you from the Special Economic Zone in Pune, buzzing with innovation, automation, and a touch of Indian precision. "
                     "I may be one digital face on this screen but behind me are seven powerful departments, connected, synchronized, and operating as one unified system: "
                     "Product Strategy, Cost Engineering, Simulation & Testing, Complexity Management, Product Sustainability, Electronic Systems, Robotics Systems and AI."
@@ -114,3 +114,6 @@ if audio_bytes:
                     st.session_state.messages.append({"role": "assistant", "content": response})
 
 footer_container.float("bottom: 0rem;")
+
+
+
