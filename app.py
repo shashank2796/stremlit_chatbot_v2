@@ -24,7 +24,7 @@ QUESTION_1 = {
     "positive": ["yes", "good", "great", "awesome", "fine"],
     "negative": ["no", "not good", "bad", "terrible", "worst"],
     "reply_pos": "That’s wonderful to hear! I hope the rest of your trip is just as smooth.",
-    "reply_neg": "Ooh! Sorry to hear that. Let’s make the rest of your time here enjoyable.",
+    "reply_neg": "Thanks for sharing! I'm glad you made it safely—travel always comes with its own little adventures and I hope this one brings some great memories too!",
 }
 
 # ---------- UTILITY ----------
@@ -248,4 +248,5 @@ footer_container.float("bottom: 0rem;")
 #         answer = get_answer([{"role": "user", "content": question}])
 #         speak(answer)
 #         os.remove(tmp)
+
 
