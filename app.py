@@ -43,7 +43,7 @@ if st.session_state.stage == 0 and not st.session_state.welcome1_done:
         "Yes, you heard that right. A very special welcome to our guests from afar. "
         "Mr. CP, Mr. Nino, and all the members of this esteemed delegation. "
         "We are pleased to have you here in India, and especially here at our home base, the Special Economic Zone of Pune.",
-        35,
+        33,
     )
     st.session_state.welcome1_done = True
     st.session_state.stage = 1
@@ -87,7 +87,7 @@ if audio_bytes:
                 )
 
                 # short reply to Q1
-                speak(reply, 2)
+                speak(reply,4)
                 st.session_state.messages.append({"role": "assistant", "content": reply})
 
                 # second welcome (played automatically)
@@ -248,6 +248,7 @@ footer_container.float("bottom: 0rem;")
 #         answer = get_answer([{"role": "user", "content": question}])
 #         speak(answer)
 #         os.remove(tmp)
+
 
 
 
