@@ -87,7 +87,7 @@ if audio_bytes:
                 )
 
                 # short reply to Q1
-                speak(reply,5)
+                speak(reply,10)
                 st.session_state.messages.append({"role": "assistant", "content": reply})
 
                 # second welcome (played automatically)
@@ -248,6 +248,7 @@ footer_container.float("bottom: 0rem;")
 #         answer = get_answer([{"role": "user", "content": question}])
 #         speak(answer)
 #         os.remove(tmp)
+
 
 
 
