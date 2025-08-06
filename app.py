@@ -4,33 +4,37 @@ from audio_recorder_streamlit import audio_recorder
 from streamlit_float import float_init
 import os
 import time
+import pathlib
 
 float_init()
 
 # ---------- CONFIG ----------
-FLAT_LINE_VIDEO   = "flatline.mp4"
-HEARTBEAT_VIDEO   = "heartbeat.mp4"
+BASE_DIR   = pathlib.Path(__file__).parent
+FLAT_MP4   = BASE_DIR / "flatline.mp4"
+BEAT_MP4   = BASE_DIR / "heartbeat.mp4"
+
+# If videos are missing, Streamlit will show a placeholder instead of crashing
+FLAT_SRC   = str(FLAT_MP4) if FLAT_MP4.exists() else "https://cdn.pixabay.com/videos/2021/11/06/119846_large.mp4"
+BEAT_SRC   = str(BEAT_MP4) if BEAT_MP4.exists() else "https://cdn.pixabay.com/videos/2021/11/06/119846_large.mp4"
 
 QUESTION_1 = {
     "text": "How was your flight?",
     "positive": ["yes", "good", "great", "awesome", "fine"],
     "negative": ["no", "not good", "bad", "terrible", "worst"],
-    "reply_pos": "That’s wonderful to hear! I hope the rest of your trip is just as smooth.",
-    "reply_neg": "Sorry to hear that. Let’s make the rest of your time here enjoyable.",
+    "reply_pos": "That’s wonderful to hear! I hope the rest of your trip is smooth.",
+    "reply_neg": "Sorry to hear that. Let’s make the rest of your time enjoyable.",
 }
 
 # ---------- SESSION STATE ----------
-for k in ("stage", "welcome1_done", "welcome2_done", "is_speaking"):
-    if k not in st.session_state:
-        st.session_state[k] = 0 if k == "stage" else False
+for k in ("stage", "welcome1_done", "is_speaking"):
+    st.session_state.setdefault(k, 0 if k == "stage" else False)
 
 # ---------- UTILITY ----------
 def speak(text: str):
-    """Generate audio + play it while showing heartbeat video."""
     st.session_state.is_speaking = True
     audio_file = text_to_speech(text)
     autoplay_audio(audio_file)
-    time.sleep(len(text.split()) / 2.5)  # crude duration
+    time.sleep(len(text.split()) / 2.5)
     os.remove(audio_file)
     st.session_state.is_speaking = False
 
@@ -38,15 +42,13 @@ def speak(text: str):
 st.markdown(
     """
     <style>
-    body {background-color:#111;}
-    .main .block-container {padding:0}
-    .video-container {display:flex;justify-content:center;align-items:center;height:85vh}
-    video {max-height:70vh;border-radius:12px;}
+    body, .main .block-container {padding:0}
+    .video-container {display:flex;justify-content:center;align-items:center;height:85vh;}
+    video {max-height:80vh;border-radius:12px;}
     </style>
     """,
     unsafe_allow_html=True,
 )
-
 st.markdown(
     "<h1 style='text-align:center;color:#ffffff;padding-top:1rem'>🎙️ KION India Chatbot</h1>",
     unsafe_allow_html=True,
@@ -54,12 +56,13 @@ st.markdown(
 
 video_placeholder = st.empty()
 with video_placeholder.container():
-    video_file = HEARTBEAT_VIDEO if st.session_state.is_speaking else FLAT_LINE_VIDEO
+    src = BEAT_SRC if st.session_state.is_speaking else FLAT_SRC
     st.markdown(
         f"""
         <div class="video-container">
             <video autoplay muted loop>
-                <source src="{video_file}" type="video/mp4">
+                <source src="{src}" type="video/mp4">
+                Your browser does not support the video tag.
             </video>
         </div>
         """,
@@ -76,10 +79,9 @@ footer.float("bottom:0;")
 # 1) first welcome
 if st.session_state.stage == 0 and not st.session_state.welcome1_done:
     speak(
-        "Hi everyone. I’m honored to be your host today. Welcome… and a biiiiig Namasssssteeeee. "
-        "I am KTCI – not just a robot, but a full-fledged department in myself. "
-        "A very special welcome to our guests from afar. "
-        "We are pleased to have you here in India, especially at our home base in Pune."
+        "Hi everyone. I’m honored to be your host today. "
+        "Welcome… and a biiiiig Namasssssteeeee. "
+        "I am KTCI – your full-fledged department on screen."
     )
     st.session_state.welcome1_done = True
     st.session_state.stage = 1
@@ -91,39 +93,32 @@ if st.session_state.stage == 1:
 
 # 3) process Q1 answer
 if audio_bytes and st.session_state.stage == 2:
-    tmp_audio = "temp_audio.mp3"
-    with open(tmp_audio, "wb") as f:
+    tmp = "temp.mp3"
+    with open(tmp, "wb") as f:
         f.write(audio_bytes)
-    transcript = speech_to_text(tmp_audio)
+    transcript = speech_to_text(tmp)
     if transcript:
-        answer = transcript.lower()
-        reply = (
-            QUESTION_1["reply_pos"]
-            if any(p in answer for p in QUESTION_1["positive"])
-            else QUESTION_1["reply_neg"]
-        )
+        # reply
+        reply = QUESTION_1["reply_pos"] if any(p in transcript.lower() for p in QUESTION_1["positive"]) else QUESTION_1["reply_neg"]
         speak(reply)
-        second_welcome = (
+        # second welcome
+        speak(
             "Now… let’s get started. Behind me are seven powerful departments, "
-            "connected and operating as one unified system: "
-            "Product Strategy, Cost Engineering, Simulation & Testing, "
-            "Complexity Management, Product Sustainability, Electronic Systems, "
-            "Robotics Systems and AI."
+            "connected and operating as one unified system."
         )
-        speak(second_welcome)
-        os.remove(tmp_audio)
+        os.remove(tmp)
         st.session_state.stage = 3  # free chat
 
-# 4) free chat loop
+# 4) free chat
 if audio_bytes and st.session_state.stage == 3:
-    tmp_audio = "temp_audio.mp3"
-    with open(tmp_audio, "wb") as f:
+    tmp = "temp.mp3"
+    with open(tmp, "wb") as f:
         f.write(audio_bytes)
-    question = speech_to_text(tmp_audio)
+    question = speech_to_text(tmp)
     if question:
         answer = get_answer([{"role": "user", "content": question}])
         speak(answer)
-        os.remove(tmp_audio)
+        os.remove(tmp)
 
 
 
@@ -253,6 +248,7 @@ if audio_bytes and st.session_state.stage == 3:
 #                     st.session_state.messages.append({"role": "assistant", "content": response})
 
 # footer_container.float("bottom: 0rem;")
+
 
 
 
