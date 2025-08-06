@@ -39,12 +39,15 @@ def speak(text: str):
     st.session_state.is_speaking = False
 
 # ---------- UI ----------
+# ---------- UI ----------
 st.markdown(
     """
     <style>
     body, .main .block-container {padding:0}
-    .video-container {display:flex;justify-content:center;align-items:center;height:85vh;}
-    video {max-height:80vh;border-radius:12px;}
+    #video-container {
+        display:flex;justify-content:center;align-items:center;
+        height:70vh;  /* << force height */
+    }
     </style>
     """,
     unsafe_allow_html=True,
@@ -54,20 +57,23 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-video_placeholder = st.empty()
-with video_placeholder.container():
-    src = BEAT_SRC if st.session_state.is_speaking else FLAT_SRC
-    st.markdown(
-        f"""
-        <div class="video-container">
-            <video autoplay muted loop>
-                <source src="{src}" type="video/mp4">
-                Your browser does not support the video tag.
-            </video>
-        </div>
-        """,
-        unsafe_allow_html=True,
-    )
+# absolute paths for safety
+flat = str(FLAT_MP4) if FLAT_MP4.exists() else str(BEAT_MP4)
+beat = str(BEAT_MP4) if BEAT_MP4.exists() else str(FLAT_MP4)
+
+video_url = beat if st.session_state.is_speaking else flat
+
+st.markdown(
+    f"""
+    <div id="video-container">
+        <video width="480" height="270" autoplay muted loop>
+            <source src="{video_url}" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+    </div>
+    """,
+    unsafe_allow_html=True,
+)
 
 # Floating mic
 footer = st.container()
@@ -248,6 +254,7 @@ if audio_bytes and st.session_state.stage == 3:
 #                     st.session_state.messages.append({"role": "assistant", "content": response})
 
 # footer_container.float("bottom: 0rem;")
+
 
 
 
