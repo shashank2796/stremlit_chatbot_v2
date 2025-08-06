@@ -99,7 +99,7 @@ if audio_bytes:
                     "You’ll get to know each of them as your journey with us unfolds today. Think of me as your interface, your assistant, and your guide. Let the KTCI experience begin."
                     "And remember – I’m always connected, always learning."
                 )
-                speak(second_welcome, 50)
+                speak(second_welcome, 45)
                 st.session_state.messages.append({"role": "assistant", "content": second_welcome})
 
                 # jump to free chat
@@ -248,3 +248,4 @@ footer_container.float("bottom: 0rem;")
 #         answer = get_answer([{"role": "user", "content": question}])
 #         speak(answer)
 #         os.remove(tmp)
+
