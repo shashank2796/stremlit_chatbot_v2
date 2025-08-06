@@ -9,9 +9,8 @@ import pathlib
 float_init()
 
 # ---------- CONFIG ----------
-BASE_DIR   = pathlib.Path(__file__).parent
-FLAT_SRC   = str(BASE_DIR / "flatline.mp4")
-BEAT_SRC   = str(BASE_DIR / "heartbeat.mp4")
+FLAT_SRC = pathlib.Path(__file__).with_name("flatline.mp4")   # confirmed path
+BEAT_SRC = pathlib.Path(__file__).with_name("heartbeat.mp4")  # confirmed path
 
 QUESTION_1 = {
     "text": "How was your flight?",
@@ -30,7 +29,7 @@ def speak(text: str):
     st.session_state.is_speaking = True
     audio_file = text_to_speech(text)
     autoplay_audio(audio_file)
-    time.sleep(len(text.split()) / 2.5)  # adjust to real duration
+    time.sleep(len(text.split()) / 2.5)  # crude duration
     os.remove(audio_file)
     st.session_state.is_speaking = False
 
@@ -51,7 +50,7 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-video_url = BEAT_SRC if st.session_state.is_speaking else FLAT_SRC
+video_url = str(BEAT_SRC) if st.session_state.is_speaking else str(FLAT_SRC)
 st.markdown(
     f"""
     <div id="video-container">
@@ -249,6 +248,7 @@ if audio_bytes and st.session_state.stage == 3:
 #                     st.session_state.messages.append({"role": "assistant", "content": response})
 
 # footer_container.float("bottom: 0rem;")
+
 
 
 
